@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.0",
+    "or": "^0.2.0",
+    "react": "^19.0.0",
+    "react-canvas-draw": "^1.2.1",
+    "react-color": "^2.19.3",
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.0.2"
+  }
+}
