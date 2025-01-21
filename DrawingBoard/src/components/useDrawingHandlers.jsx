@@ -108,7 +108,7 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
         if (type === "diley") {
             setTimeout(() => {
                 updateLines(newPoint);
-            }, 2000); // דיליי של 200ms
+            }, 200); // דיליי של 200ms
         } else {
             updateLines(newPoint); // ברירת מחדל
         }
