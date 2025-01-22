@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rect, Line } from "react-konva";
-import useDrawingHandlers from "./useDrawingHandlers";
+// import useDrawingHandlers from "../hook/useDrawingHandlers";
 // const { lines, handleMouseDown, handleMouseMove, handleMouseUp } =
 //   useDrawingHandlers({
 //     type: "mirror",

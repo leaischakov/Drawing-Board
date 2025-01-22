@@ -1,6 +1,6 @@
 import React from "react";
 import { Rect, Line } from "react-konva";
-import useDrawingHandlers from "./useDrawingHandlers";
+import useDrawingHandlers from "../hook/useDrawingHandlers";
 
 const BottomRight = ({ x, y, width, height, color }) => {
     const {

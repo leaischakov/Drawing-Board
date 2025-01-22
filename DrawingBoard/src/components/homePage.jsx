@@ -4,6 +4,8 @@ import TopLeft from './topLeft';
 import TopRight from './topRight';
 import BottomLeft from './bottomLeft';
 import BottomRight from './bottomRight';
+import useDrawingHandlers from "../hook/useDrawingHandlers";
+
 
 const Canvas = () => {
   const stageRef = useRef(null);

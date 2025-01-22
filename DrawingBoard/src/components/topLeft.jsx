@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Rect, Line } from "react-konva";
-import useDrawingHandlers from "./useDrawingHandlers";
+import useDrawingHandlers from "../hook/useDrawingHandlers";
 
 const TopLeft = ({ x, y, width, height, color }) => {
+  //קריאה ל HOOK 
   const { lines, handleMouseDown, handleMouseMove, handleMouseUp, handleTouchStart, handleTouchMove, handleTouchEnd } =
     useDrawingHandlers({
       type: "default",
