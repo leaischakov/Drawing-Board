@@ -1,13 +1,14 @@
 
 import { useState, useEffect } from "react";
-const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
+
+const useDrawingHandlers = ({ type }) => {
     const [lines, setLines] = useState([]); // שמירת הקווים
-    const [isDrawing, setIsDrawing] = useState(false);
-    const [stageSize, setStageSize] = useState({
+    const [isDrawing, setIsDrawing] = useState(false);//אם המשתמש התחיל לצייר 
+    const [stageSize, setStageSize] = useState({//גודל מסך
         width: window.innerWidth / 4, // 25% מהרוחב של המסך
         height: window.innerHeight / 4, // 25% מהגובה של המסך
     });
-
+    //למניעת גלילה
     useEffect(() => {
         const disableScroll = () => {
             document.body.style.overflow = 'hidden';
@@ -21,7 +22,7 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
 
         return () => enableScroll(); // החזרת הגלילה כאשר הקומפוננטה מתנקה
     }, []);
-
+    //טיפול בשינוי גודל המסך
     useEffect(() => {
         const handleResize = () => {
             const newSize = { width: window.innerWidth / 4, height: window.innerHeight / 4 }; // תמיד 25% מהמסך
@@ -34,7 +35,7 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
             window.removeEventListener("resize", handleResize);
         };
     }, [lines, stageSize]);
-
+    //טיפול בשינוי גודל המסך
     const updateLinesOnResize = (newSize) => {
         const scaleX = newSize.width / stageSize.width;
         const scaleY = newSize.height / stageSize.height;
@@ -48,11 +49,11 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
 
         setLines(updatedLines);
     };
-
+    //בעת לחיצה על העכבר
     const handleMouseDown = (event) => {
-        setIsDrawing(true);
+        setIsDrawing(true);//משתנה המסמל על מצב הציור  = TRUE
         const stage = event.target.getStage();
-        const pointerPosition = stage.getPointerPosition();
+        const pointerPosition = stage.getPointerPosition();//מיקום הנקודה
 
         let newPoint = [
             (pointerPosition.x / window.innerWidth) * stageSize.width,
@@ -61,11 +62,11 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
         const lineId = Date.now();
         setLines([...lines, { id: lineId, points: newPoint }]);
     };
-
+    //בעת מגע
     const handleTouchStart = (event) => {
-        setIsDrawing(true);
+        setIsDrawing(true);//משתנה המסמל על מצב הציור  = TRUE
         const stage = event.target.getStage();
-        const pointerPosition = stage.getPointerPosition();
+        const pointerPosition = stage.getPointerPosition();//מיקום הנקודה
 
         let newPoint = [
             (pointerPosition.x / window.innerWidth) * stageSize.width,
@@ -75,9 +76,9 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
         setLines([...lines, { id: lineId, points: newPoint }]);
 
     }
-
+    //בעת הזזת העכבר
     const handleMouseMove = (event) => {
-        if (!isDrawing) return;
+        if (!isDrawing) return;// אם המשנה הוא false אז RETURN
         const stage = event.target.getStage();
         const pointerPosition = stage.getPointerPosition();
 
@@ -85,25 +86,6 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
             (pointerPosition.x / window.innerWidth) * stageSize.width,
             (pointerPosition.y / window.innerHeight) * stageSize.height,
         ];
-
-        // אם יש צורך במראה (Mirror Effect)
-        if (type === 'mirror') {
-            console.log("type", type);
-
-            // מראה בציר ה־X (הפוך את ה-X)
-            const mirroredPoint = [
-                stageSize.width - newPoint[0], // היפוך ציר ה-X
-                newPoint[1] // שמור את ה־Y
-            ];
-
-            // עדכון הקווים
-            setLines((prevLines) => {
-                const lastLine = { ...prevLines[prevLines.length - 1] };
-                lastLine.points = [...lastLine.points, ...newPoint, ...mirroredPoint];
-                return [...prevLines.slice(0, -1), lastLine];
-            });
-        }
-
         // במקרה אחר: דיליי או ברירת מחדל
         if (type === "diley") {
             setTimeout(() => {
@@ -113,9 +95,9 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
             updateLines(newPoint); // ברירת מחדל
         }
     };
-
+    //בעת הזזת מגע
     const handleTouchMove = (event) => {
-        if (!isDrawing) return;
+        if (!isDrawing) return;// אם המשנה הוא false אז RETURN
         const stage = event.target.getStage();
         const pointerPosition = stage.getPointerPosition();
 
@@ -123,6 +105,7 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
             (pointerPosition.x / window.innerWidth) * stageSize.width,
             (pointerPosition.y / window.innerHeight) * stageSize.height,
         ];
+        // במקרה אחר: דיליי או ברירת מחדל
         if (type === "diley") {
             setTimeout(() => {
                 updateLines(newPoint);
@@ -131,81 +114,80 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
             updateLines(newPoint); // ברירת מחדל
         }
     };
-
-
+    //בעת שחרור העכבר
     const handleMouseUp = () => {
-        setIsDrawing(false);
+        setIsDrawing(false);// החזרת המשתנה ל FALSE
         const lastLineId = lines[lines.length - 1]?.id;
+        //הפעלת הדהייה לאחר שחרור העכבר
         if (type === "fade" && lastLineId) {
             setTimeout(() => fadeOut(lastLineId), 0);
         }
     };
-
+    //בעת שחרור המגע
     const handleTouchEnd = () => {
-        setIsDrawing(false);
+        setIsDrawing(false);// החזרת המשתנה ל FALSE
         const lastLineId = lines[lines.length - 1]?.id;
         if (type === "fade" && lastLineId) {
             setTimeout(() => fadeOut(lastLineId), 0);
         }
     };
 
+    // פונקציה שמעדכנת את הקווים
     const updateLines = (newPoint) => {
-        setLines((prevLines) => {
-            if (prevLines.length === 0) return prevLines;
+        setLines((prevLines) => { // מעדכן את המצב של הקווים הקיימים
+            if (prevLines.length === 0) return prevLines; // אם אין קווים, מחזיר את הרשימה הנוכחית
 
-            const lastLine = prevLines[prevLines.length - 1];
-            const points = Array.isArray(lastLine.points) ? lastLine.points : [];
-
-            const updatedLastLine = {
-                ...lastLine,
-                points: [...points, ...newPoint],
-                opacity: points.length > 0 ? 1 : undefined,
+            const lastLine = prevLines[prevLines.length - 1]; // מוצא את הקו האחרון שנוסף
+            const points = Array.isArray(lastLine.points) ? lastLine.points : []; // מוודא שהנקודות בקו הן מערך
+            const updatedLastLine = { // מעדכן את הקו האחרון עם הנקודות החדשות
+                ...lastLine, // שומר על שאר המאפיינים של הקו
+                points: [...points, ...newPoint], // מוסיף את הנקודות החדשות למערך הנקודות הקיים
+                opacity: points.length > 0 ? 1 : undefined, // מגדיר שקיפות לקו אם כבר יש בו נקודות//FADE
             };
 
-            return [...prevLines.slice(0, -1), updatedLastLine];
+            return [...prevLines.slice(0, -1), updatedLastLine]; // מחזיר את כל הקווים, כולל הקו האחרון המעודכן
         });
     };
 
+    // פונקציה שמבצעת דהייה 
     const fadeOut = (lineId) => {
-        const fadeStep = 0.003;
-        const intervalTime = 10;
+        const fadeStep = 0.003; // הגדרת כמות הדהייה בכל שלב
+        const intervalTime = 10; // הזמן בין שלב לשלב בדהייה 
 
-        setTimeout(() => {
-            const interval = setInterval(() => {
-                setLines((prevLines) => {
-                    const updatedLines = [...prevLines];
-                    const lineIndex = updatedLines.findIndex((l) => l.id === lineId);
+        const interval = setInterval(() => { // קובע אינטרוול לדהייה הדרגתית
+            setLines((prevLines) => { // מעדכן את הקווים במצב
+                const updatedLines = [...prevLines]; // יוצר עותק של מערך הקווים
+                const lineIndex = updatedLines.findIndex((l) => l.id === lineId); // מוצא את הקו שרוצים לדהות לפי ה-ID
 
-                    if (lineIndex === -1) {
-                        clearInterval(interval);
-                        return prevLines;
-                    }
+                if (lineIndex === -1) { // אם לא נמצא קו עם ה-ID הזה
+                    clearInterval(interval); // מפסיק את האינטרוול
+                    return prevLines; // מחזיר את המצב הנוכחי
+                }
 
-                    const line = updatedLines[lineIndex];
-                    if (Math.round(line.opacity * 1000) / 1000 <= 0) {
-                        updatedLines.splice(lineIndex, 1);
-                    } else {
-                        updatedLines[lineIndex] = {
-                            ...line,
-                            opacity: Math.max(0, line.opacity - fadeStep),
-                        };
-                    }
+                const line = updatedLines[lineIndex]; // מוצא את הקו שרוצים לזהות
+                if (Math.round(line.opacity * 1000) / 1000 <= 0) { // אם השקיפות של הקו הגיעה ל-0 או פחות
+                    updatedLines.splice(lineIndex, 1); // מסיר את הקו ממערך הקווים
+                } else {
+                    updatedLines[lineIndex] = { // מעדכן את הקו עם רמת שקיפות חדשה
+                        ...line, // שומר על שאר המאפיינים של הקו
+                        opacity: Math.max(0, line.opacity - fadeStep), // מוריד את רמת השקיפות עד 0
+                    };
+                }
 
-                    return updatedLines;
-                });
-            }, intervalTime);
-        }, 0);
+                return updatedLines; // מחזיר את מערך הקווים המעודכן
+            });
+        }, intervalTime); //10
     };
 
     return {
-        lines: lines.map((line) => ({
-            ...line,
-            points: line.points.map((point, index) =>
-                index % 2 === 0
-                    ? (point / stageSize.width) * window.innerWidth
-                    : (point / stageSize.height) * window.innerHeight
+        lines: lines.map((line) => ({ // עובר על כל הקווים במערך lines.
+            ...line, // משכפל את כל המאפיינים של הקו.
+            points: line.points.map((point, index) => // עובר על כל הנקודות של הקו ומעדכן אותן.
+                index % 2 === 0 // בודק אם האינדקס הוא זוגי (x) או אי-זוגי (y).
+                    ? (point / stageSize.width) * window.innerWidth // מחשב מחדש את ערך ה-x לפי רוחב המסך החדש.
+                    : (point / stageSize.height) * window.innerHeight // מחשב מחדש את ערך ה-y לפי גובה המסך החדש.
             ),
-        })),
+        })), // 
         handleMouseDown,
         handleMouseMove,
         handleMouseUp,
@@ -214,25 +196,7 @@ const useDrawingHandlers = ({ beforeAddPoint, afterAddPoint, type }) => {
         handleTouchEnd,
         stageSize,
     };
+
 };
 
 export default useDrawingHandlers;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "konva": "^9.3.18",
-    "mobx": "^6.13.5",
-    "mobx-react-lite": "^4.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-konva": "^19.0.2"

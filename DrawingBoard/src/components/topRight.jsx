@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Rect, Line } from "react-konva";
 import useDrawingHandlers from "./useDrawingHandlers";
+
 const TopRight = ({ x, y, width, height, color }) => {
 
   const { lines, handleMouseDown, handleMouseMove, handleMouseUp, handleTouchStart, handleTouchMove, handleTouchEnd } =
@@ -29,7 +30,7 @@ const TopRight = ({ x, y, width, height, color }) => {
         <Line
           key={index}
           points={line.points}
-          stroke = 'pink'
+          stroke='bluck'
           strokeWidth={2}
         />
       ))}

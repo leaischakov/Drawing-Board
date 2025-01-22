@@ -1,5 +1,3 @@
-//////////////////////טובבבבבבבבבבבבבבבבבבבבב
-
 import React, { useState, useEffect } from "react";
 import { Rect, Line } from "react-konva";
 import useDrawingHandlers from "./useDrawingHandlers";
@@ -7,7 +5,6 @@ import useDrawingHandlers from "./useDrawingHandlers";
 //   useDrawingHandlers({
 //     type: "mirror",
 //   });
-
 
 const BottomLeft = ({ x, y, width, height, color }) => {
 
@@ -156,14 +153,14 @@ const BottomLeft = ({ x, y, width, height, color }) => {
             tension={0.5}
             lineCap="round"
           />
-
+          {/* אפקט המראה */}
           <Line
             points={line.points.map((point, idx) =>
               idx % 2 === 0
                 ? x + width - (point * window.innerWidth - x)
                 : point * window.innerHeight
             )}
-            stroke="red"
+            stroke="white"
             strokeWidth={2}
             tension={0.5}
             lineCap="round"
@@ -175,6 +172,3 @@ const BottomLeft = ({ x, y, width, height, color }) => {
 };
 
 export default BottomLeft;
-
-
-

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Rect, Line } from "react-konva";
-import Grid from "@mui/material/Grid";
 import useDrawingHandlers from "./useDrawingHandlers";
 
 const TopLeft = ({ x, y, width, height, color }) => {
